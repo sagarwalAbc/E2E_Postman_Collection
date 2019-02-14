@@ -1,0 +1,4506 @@
+{
+	"info": {
+		"_postman_id": "30503321-5d51-43d1-9756-6fb321c2b6c0",
+		"name": "E2E January Milestone",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Integrated_Flow",
+			"item": [
+				{
+					"name": "Authorization",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "24ec140a-d8be-4a2f-badd-47552560a90b",
+								"exec": [
+									"if (responseCode.code != 200)",
+									"{",
+									"    tests[\"[INFO]  Request Body: \" + JSON.stringify(request)] = true;",
+									"    tests[\"[INFO] Response Body: \" + responseBody] = true;",
+									"}",
+									"",
+									"else if (responseCode.code === 200)",
+									"{",
+									"    var jsonData = JSON.parse(responseBody);",
+									"    postman.setEnvironmentVariable(\"authId\", jsonData.access_token);",
+									"   ",
+									"    tests[\"Response Body has Correct Token Type\"] = responseBody.has(\"\\\"token_type\\\":\\\"bearer\\\"\");",
+									"    tests[\"Response Body has Access Token\"] = responseBody.has(\"\\\"access_token\\\":\"+\"\\\"\"+postman.getEnvironmentVariable(\"authId\")+\"\\\"\");",
+									"    tests[\"Response Body has Expiration Field\"] = responseBody.has(\"expires_in\");",
+									"    tests[\"Response Body has Correct Scope\"] = responseBody.has(\"\\\"scope\\\":\"+\"\\\"\"+jsonData.scope+\"\\\"\");",
+									"}",
+									"",
+									"tests[\"Response code should be 200\"] = responseCode.code === 200;",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic QVVUT01BVEVEX1RFU1RJTkc6dDNzdEBsbHRoM3RoMW5ncw=="
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "",
+								"value": "",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{URL}}/token?client_id=AUTOMATED_TESTING&grant_type=password&username=test4abc3%40abcfinancial.com&password=abc1234$",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"token"
+							],
+							"query": [
+								{
+									"key": "client_id",
+									"value": "AUTOMATED_TESTING"
+								},
+								{
+									"key": "grant_type",
+									"value": "password"
+								},
+								{
+									"key": "username",
+									"value": "test4abc3%40abcfinancial.com"
+								},
+								{
+									"key": "password",
+									"value": "abc1234$"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create_Organization_With_Location",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2305057c-9e3e-437e-bc07-9fe8c8713c58",
+								"exec": [
+									"",
+									"if ( responseCode.code!=201)",
+									"{",
+									"    tests[\"[INFO]  Request Body: \" + JSON.stringify(request)] = true;",
+									"    tests[\"[INFO] Response Body: \" + responseBody] = true;",
+									"}",
+									"else if (responseCode.code === 201)",
+									"{",
+									"   var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"orgId\", jsonData.id);",
+									"postman.setEnvironmentVariable(\"locationId\", jsonData.locations[0].id);",
+									"",
+									"tests[\"Response Body has Correct Organization id\"] = responseBody.has(\"\\\"id\\\":\"+\"\\\"\"+postman.getEnvironmentVariable(\"orgId\")+\"\\\"\");",
+									"    tests[\"Response Body has Correct Location id\"] = responseBody.has(\"\\\"id\\\":\"+\"\\\"\"+postman.getEnvironmentVariable(\"locationId\")+\"\\\"\");",
+									"}",
+									"tests[\"Response code should be 201\"] = responseCode.code === 201;",
+									"",
+									"",
+									"",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "182d5be1-33d8-4062-acd7-78ed3e8a9a4b",
+								"exec": [
+									"",
+									"",
+									"",
+									"var names = ['Savage', 'Stephens', 'Sparks', 'Stark', 'Sparks', 'Bottin', 'Jones', 'Arthurson', 'Harden', 'Gray', 'Bryson', 'Matthison', 'Wilson', 'Ivey', 'Netzley', 'Piche','Metz','Cass','Kuzma','Reno','Avis','Saville','Selvey','Stoecker','Auerbach','Eilerman','Holsey','Zepp','Davids','Foster','Sim','Messana','Schloss','Sylvester','Leathers','Niles','Combs','Phillips','Augsburger','Stroman','Beveridge','Gattis','Minnis','Fortes','Ullman','Bunkley','Spivey','Sterrett','Crist','Chow','Lierman','Ashalintubbi','Laura','Crawford','Balmer','Mcmullin','Dussault','Holbrook','Dion','Lechler','Beaton','Elzey','Sams','Irby','Hollaway','Levert','Gough','Croom','Dedman','Hatmaker','Tippetts','Odoms','Banaszak','Viveros','Hempstead','Tower','Atlas','Lozoya','Fulp','Corbo','Chapell','Monier','Selle','Parenti','Karl','Kuehn','Speers','Cambron','Blossom','Peart','Gunter','Hagenbuch','Amend','Tiernan','Ayala','Maclenn','Golden','Colone','Golding','Landreth','Shams','Liddle','Alley','Levy','Barajas','Tetrault','Shue','Lenton','Boss','Weedman','Bergeron','Valls','Pooler','Mollett','Viger','Donnellan','Dedeaux'];",
+									"",
+									"var randName1 = names[Math.floor(Math.random() * names.length)];",
+									"postman.setEnvironmentVariable(\"randName\", randName1);",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authId}}"
+							},
+							{
+								"key": "",
+								"value": "",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\" : \"{{randName}}{{randName}}\",\r\n  \"email\" : \"{{randName}}@qa4life.com\",\r\n  \"phone\" : \"1310629874\", \r\n  \"signInLink\" : \"https://test.url.qa4{{randName}}.com\",\r\n  \"websiteUrl\" : \"www.planet-fitness.com\",\r\n  \"timezone\" : \"US/Alaska\",\r\n  \"addresses\" : [ {\r\n    \"address1\" : \"AR-107\",\r\n    \"address2\" : \"Sherwood\",\r\n    \"city\" : \"Little Rock\",\r\n    \"state\" : \"AR\",\r\n    \"country\" : \"USA\",\r\n    \"zipCode\" : \"72120\"\r\n  } ],\r\n  \"locations\" : [ {\r\n    \"name\" : \"{{randName}}{{randName}}\",\r\n    \"email\" : \"noreply@qa4{{randName}}.com\",\r\n    \"phone\" :\"1310629874\",\r\n    \"timezone\" : \"US/Alaska\",\r\n    \"addresses\" : [ {\r\n      \"address1\" : \"AR-107\",\r\n      \"address2\" : \"Sherwood1\",\r\n      \"city\" : \"Little Rock\",\r\n      \"zipCode\" : \"72121\",\r\n      \"country\" : \"USA\",\r\n      \"state\" : \"AL\"\r\n    } ]\r\n  } ]\r\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/organization",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"organization"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create_Item_Category",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "4de2890b-e7dc-4154-9ed7-f4657cb4fe1e",
+								"exec": [
+									"var names = ['Savage', 'Stephens', 'Sparks', 'Stark', 'Sparks', 'Bottin', 'Jones', 'Arthurson', 'Harden', 'Gray', 'Bryson', 'Matthison', 'Wilson', 'Ivey', 'Netzley', 'Piche','Metz','Cass','Kuzma','Reno','Avis','Saville','Selvey','Stoecker','Auerbach','Eilerman','Holsey','Zepp','Davids','Foster','Sim','Messana','Schloss','Sylvester','Leathers','Niles','Combs','Phillips','Augsburger','Stroman','Beveridge','Gattis','Minnis','Fortes','Ullman','Bunkley','Spivey','Sterrett','Crist','Chow','Lierman','Ashalintubbi','Laura','Crawford','Balmer','Mcmullin','Dussault','Holbrook','Dion','Lechler','Beaton','Elzey','Sams','Irby','Hollaway','Levert','Gough','Croom','Dedman','Hatmaker','Tippetts','Odoms','Banaszak','Viveros','Hempstead','Tower','Atlas','Lozoya','Fulp','Corbo','Chapell','Monier','Selle','Parenti','Karl','Kuehn','Speers','Cambron','Blossom','Peart','Gunter','Hagenbuch','Amend','Tiernan','Ayala','Maclenn','Golden','Colone','Golding','Landreth','Shams','Liddle','Alley','Levy','Barajas','Tetrault','Shue','Lenton','Boss','Weedman','Bergeron','Valls','Pooler','Mollett','Viger','Donnellan','Dedeaux'];",
+									"",
+									"var randName = names[Math.floor(Math.random() * names.length)];",
+									"postman.setEnvironmentVariable(\"randName\", randName);",
+									"",
+									"",
+									"function stringGen(len) {",
+									"var text = \"\";",
+									"",
+									"var charset = \"abcdefghijklmnopqrstuvwxyz\";",
+									"",
+									"for (var i = 0; i < len; i++)",
+									"text += charset.charAt(Math.floor(Math.random() * charset.length));",
+									"",
+									"return text;",
+									"}",
+									"",
+									"var uniqueChar= stringGen(8)",
+									"postman.setEnvironmentVariable(\"uniqueChar\", uniqueChar);",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "6c59b216-cb71-46ec-bd5c-245e4d307c64",
+								"exec": [
+									"",
+									"if ( responseCode.code!=201)",
+									"{",
+									"    tests[\"[INFO]  Request Body: \" + JSON.stringify(request)] = true;",
+									"    tests[\"[INFO] Response Body: \" + responseBody] = true;",
+									"}",
+									"",
+									"",
+									"",
+									"else if (responseCode.code === 201)",
+									"{",
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"itemcategoryId\", jsonData.id);",
+									"",
+									"",
+									"tests[\"Response Body has correct item Category id\"] = responseBody.has(\"\\\"id\\\":\"+\"\\\"\"+postman.getEnvironmentVariable(\"itemcategoryId\")+\"\\\"\");",
+									"",
+									"}",
+									"tests[\"Response code should be 201\"] = responseCode.code === 201;",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authId}}"
+							},
+							{
+								"key": "ABCFS-ORGANIZATION-ID",
+								"value": "{{orgId}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n \"name\" : \"{{randName}}{{uniqueChar}}\",\r\n \"locationId\" : \"{{locationId}}\",\r\n \"description\" : \"{{randName}}{{randName}}\"\r\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/item-category",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"item-category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create_Item",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2305057c-9e3e-437e-bc07-9fe8c8713c58",
+								"exec": [
+									"",
+									"if ( responseCode.code!=201)",
+									"{",
+									"    tests[\"[INFO]  Request Body: \" + JSON.stringify(request)] = true;",
+									"    tests[\"[INFO] Response Body: \" + responseBody] = true;",
+									"}",
+									"",
+									"",
+									"else if (responseCode.code === 201)",
+									"{",
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"postman.setEnvironmentVariable(\"itemId\", jsonData.id.id);",
+									"postman.setEnvironmentVariable(\"version\", jsonData.id.version);",
+									"",
+									"",
+									"tests[\"Response Body has correct item id\"] = responseBody.has(\"\\\"id\\\":\"+\"\\\"\"+postman.getEnvironmentVariable(\"itemId\")+\"\\\"\");",
+									"",
+									"tests[\"Response Body has correct version\"] = responseBody.has(\"\\\"version\\\":\"+postman.getEnvironmentVariable(\"version\"));",
+									"",
+									"}",
+									"tests[\"Response code should be 201\"] = responseCode.code === 201;",
+									"",
+									"",
+									"",
+									"",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "182d5be1-33d8-4062-acd7-78ed3e8a9a4b",
+								"exec": [
+									"",
+									"",
+									"",
+									"var names = ['Savage', 'Stephens', 'Sparks', 'Stark', 'Sparks', 'Bottin', 'Jones', 'Arthurson', 'Harden', 'Gray', 'Bryson', 'Matthison', 'Wilson', 'Ivey', 'Netzley', 'Piche','Metz','Cass','Kuzma','Reno','Avis','Saville','Selvey','Stoecker','Auerbach','Eilerman','Holsey','Zepp','Davids','Foster','Sim','Messana','Schloss','Sylvester','Leathers','Niles','Combs','Phillips','Augsburger','Stroman','Beveridge','Gattis','Minnis','Fortes','Ullman','Bunkley','Spivey','Sterrett','Crist','Chow','Lierman','Ashalintubbi','Laura','Crawford','Balmer','Mcmullin','Dussault','Holbrook','Dion','Lechler','Beaton','Elzey','Sams','Irby','Hollaway','Levert','Gough','Croom','Dedman','Hatmaker','Tippetts','Odoms','Banaszak','Viveros','Hempstead','Tower','Atlas','Lozoya','Fulp','Corbo','Chapell','Monier','Selle','Parenti','Karl','Kuehn','Speers','Cambron','Blossom','Peart','Gunter','Hagenbuch','Amend','Tiernan','Ayala','Maclenn','Golden','Colone','Golding','Landreth','Shams','Liddle','Alley','Levy','Barajas','Tetrault','Shue','Lenton','Boss','Weedman','Bergeron','Valls','Pooler','Mollett','Viger','Donnellan','Dedeaux'];",
+									"",
+									"var randName = names[Math.floor(Math.random() * names.length)];",
+									"postman.setEnvironmentVariable(\"randName\", randName);",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authId}}"
+							},
+							{
+								"key": "ABCFS-ORGANIZATION-ID",
+								"value": "{{orgId}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"active\" : true,\r\n  \"name\" : \"{{randName}}{{uniqueChar}}\",\r\n  \"type\" : \"AMENITY\",\r\n  \"price\" : \"20\",\r\n  \"quantity\" : \"1\",\r\n  \"unlimited\" : true,\r\n  \"expirationStart\" : \"PURCHASE\",\r\n  \"expirationTime\" : 14,\r\n  \"expirationUnit\" : \"DAYS\",\r\n  \"currencyId\" : \"USD\",\r\n  \"locationId\" : \"{{locationId}}\",\r\n  \"itemCategoryId\" : \"{{itemcategoryId}}\",\r\n  \"description\" : \"Test Description\"\r\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/item",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"item"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create_Subscription_Plan",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2305057c-9e3e-437e-bc07-9fe8c8713c58",
+								"exec": [
+									"if ( responseCode.code!=201)",
+									"{",
+									"    tests[\"[INFO]  Request Body: \" + JSON.stringify(request)] = true;",
+									"    tests[\"[INFO] Response Body: \" + responseBody] = true;",
+									"}",
+									"",
+									"else if (responseCode.code === 201)",
+									"{",
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"postman.setEnvironmentVariable(\"planId\", jsonData.id.id);",
+									"",
+									"tests[\"Response Body has correct Plan id\"] = responseBody.has(\"\\\"id\\\":\"+\"\\\"\"+postman.getEnvironmentVariable(\"planId\")+\"\\\"\");",
+									"",
+									"}",
+									"tests[\"Response code should be 201\"] = responseCode.code === 201;",
+									"",
+									"",
+									"",
+									"",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "182d5be1-33d8-4062-acd7-78ed3e8a9a4b",
+								"exec": [
+									"",
+									"",
+									"",
+									"var names = ['Savage', 'Stephens', 'Sparks', 'Stark', 'Sparks', 'Bottin', 'Jones', 'Arthurson', 'Harden', 'Gray', 'Bryson', 'Matthison', 'Wilson', 'Ivey', 'Netzley', 'Piche','Metz','Cass','Kuzma','Reno','Avis','Saville','Selvey','Stoecker','Auerbach','Eilerman','Holsey','Zepp','Davids','Foster','Sim','Messana','Schloss','Sylvester','Leathers','Niles','Combs','Phillips','Augsburger','Stroman','Beveridge','Gattis','Minnis','Fortes','Ullman','Bunkley','Spivey','Sterrett','Crist','Chow','Lierman','Ashalintubbi','Laura','Crawford','Balmer','Mcmullin','Dussault','Holbrook','Dion','Lechler','Beaton','Elzey','Sams','Irby','Hollaway','Levert','Gough','Croom','Dedman','Hatmaker','Tippetts','Odoms','Banaszak','Viveros','Hempstead','Tower','Atlas','Lozoya','Fulp','Corbo','Chapell','Monier','Selle','Parenti','Karl','Kuehn','Speers','Cambron','Blossom','Peart','Gunter','Hagenbuch','Amend','Tiernan','Ayala','Maclenn','Golden','Colone','Golding','Landreth','Shams','Liddle','Alley','Levy','Barajas','Tetrault','Shue','Lenton','Boss','Weedman','Bergeron','Valls','Pooler','Mollett','Viger','Donnellan','Dedeaux'];",
+									"",
+									"var randName = names[Math.floor(Math.random() * names.length)];",
+									"postman.setEnvironmentVariable(\"randName\", randName);",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authId}}"
+							},
+							{
+								"key": "ABCFS-ORGANIZATION-ID",
+								"value": "{{orgId}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\" : \"BASIC\",\r\n  \"active\" : true,\r\n  \"open\" : true,\r\n  \"frequency\" : \"ANNUALLY\",\r\n  \"description\" : \"Donald Trump\",\r\n  \"locationId\" : \"{{locationId}}\",\r\n  \"items\" : [ {\r\n    \"id\" : {\r\n      \"id\" : \"{{itemId}}\",\r\n      \"version\" : \"{{version}}\"\r\n    },\r\n    \"active\" : true,\r\n    \"name\" : \"First Test Item1\",\r\n    \"type\" : \"AMENITY\",\r\n    \"price\" : \"729\",\r\n    \"quantity\" : \"8\",\r\n    \"unlimited\" : true,\r\n    \"expirationStart\" : \"PURCHASE\",\r\n    \"currencyId\" : \"USD\",\r\n    \"locationId\" : \"{{locationId}}\"\r\n  }]}"
+						},
+						"url": {
+							"raw": "{{URL}}/subscription-plan",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"subscription-plan"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create_Member",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2305057c-9e3e-437e-bc07-9fe8c8713c58",
+								"exec": [
+									"if ( responseCode.code!=201)",
+									"{",
+									"    tests[\"[INFO]  Request Body: \" + JSON.stringify(request)] = true;",
+									"    tests[\"[INFO] Response Body: \" + responseBody] = true;",
+									"}",
+									"",
+									"else if (responseCode.code === 201)",
+									"{",
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"postman.setEnvironmentVariable(\"memberId\", jsonData.id);",
+									"",
+									"tests[\"Response Body has correct Member id\"] = responseBody.has(\"\\\"id\\\":\"+\"\\\"\"+postman.getEnvironmentVariable(\"memberId\")+\"\\\"\");",
+									"",
+									"}",
+									"tests[\"Response code should be 201\"] = responseCode.code === 201;",
+									"",
+									"",
+									"",
+									"",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "182d5be1-33d8-4062-acd7-78ed3e8a9a4b",
+								"exec": [
+									"",
+									"",
+									"",
+									"var names = ['Savage', 'Stephens', 'Sparks', 'Stark', 'Sparks', 'Bottin', 'Jones', 'Arthurson', 'Harden', 'Gray', 'Bryson', 'Matthison', 'Wilson', 'Ivey', 'Netzley', 'Piche','Metz','Cass','Kuzma','Reno','Avis','Saville','Selvey','Stoecker','Auerbach','Eilerman','Holsey','Zepp','Davids','Foster','Sim','Messana','Schloss','Sylvester','Leathers','Niles','Combs','Phillips','Augsburger','Stroman','Beveridge','Gattis','Minnis','Fortes','Ullman','Bunkley','Spivey','Sterrett','Crist','Chow','Lierman','Ashalintubbi','Laura','Crawford','Balmer','Mcmullin','Dussault','Holbrook','Dion','Lechler','Beaton','Elzey','Sams','Irby','Hollaway','Levert','Gough','Croom','Dedman','Hatmaker','Tippetts','Odoms','Banaszak','Viveros','Hempstead','Tower','Atlas','Lozoya','Fulp','Corbo','Chapell','Monier','Selle','Parenti','Karl','Kuehn','Speers','Cambron','Blossom','Peart','Gunter','Hagenbuch','Amend','Tiernan','Ayala','Maclenn','Golden','Colone','Golding','Landreth','Shams','Liddle','Alley','Levy','Barajas','Tetrault','Shue','Lenton','Boss','Weedman','Bergeron','Valls','Pooler','Mollett','Viger','Donnellan','Dedeaux'];",
+									"",
+									"var randName = names[Math.floor(Math.random() * names.length)];",
+									"postman.setEnvironmentVariable(\"randName\", randName);",
+									"",
+									"function stringGen(len) {",
+									"var text = \"\";",
+									"",
+									"var charset = \"abcdefghijklmnopqrstuvwxyz\";",
+									"",
+									"for (var i = 0; i < len; i++)",
+									"text += charset.charAt(Math.floor(Math.random() * charset.length));",
+									"",
+									"return text;",
+									"}",
+									"",
+									"var uniqueChar= stringGen(8)",
+									"postman.setEnvironmentVariable(\"uniqueChar\", uniqueChar);",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authId}}"
+							},
+							{
+								"key": "ABCFS-ORGANIZATION-ID",
+								"value": "{{orgId}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"firstName\" : \"John\",\n  \"lastName\" : \"Doe\",\n  \"middleInitial\" : \"S.\",\n  \"birthDate\" : \"1977-07-07\",\n  \"email\" : \"1{{randName}}{{uniqueChar}}.doe@qa4life.com\",\n  \"phones\" : [ {\n    \"number\" : \"1123456\",\n    \"phoneType\" : \"PRIMARY\"\n  } ],\n  \"waiverDocumentId\" : \"e2ed6924-f650-489d-9a1b-f6d7109353b7\",\n  \"termsDocumentId\" : \"16e0f594-822c-46f0-84dc-6e1e0d7e985b\",\n  \"digitalSignatureId\" : \"5804058d-1966-4d9f-8bc3-662781e2d25c\",\n  \"healthNote\" : \"High BP\",\n  \"locationId\" : \"{{locationId}}\",\n  \"addresses\" : [ {\n    \"address1\" : \"AR-107\",\n    \"address2\" : \"Sherwood\",\n    \"city\" : \"Little Rock\",\n    \"state\" : \"AR\",\n    \"country\" : \"USA\",\n    \"zipCode\" : \"72120\"\n  } ],\n  \"employmentData\" : {\n    \"employer\" : \"Exadel\",\n    \"occupation\" : \"programmer\"\n  }\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/member",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"member"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create_Payment_Method",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "bc3c36c0-1227-4e1e-ac0f-ebf2fc92be8b",
+								"exec": [
+									"if (responseCode.code != 201)",
+									"{",
+									"  tests[\"[INFO]  Request Body: \" + JSON.stringify(request)] = true;",
+									"  tests[\"[INFO] Response Body: \" + responseBody] = true;",
+									"}",
+									"",
+									"else if (responseCode.code === 201)",
+									"{",
+									"  var jsonData = JSON.parse(responseBody);",
+									"  postman.setEnvironmentVariable(\"payment_method_id\", jsonData.id);",
+									"",
+									"  tests[\"Response Body has Payment Method  Id\"] = responseBody.has(\"\\\"id\\\":\"+\"\\\"\"+postman.getEnvironmentVariable(\"payment_method_id\")+\"\\\"\");",
+									"}",
+									"",
+									"tests[\"Response code should be 201\"] = responseCode.code === 201;"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "09a0a1cd-3125-450b-a1ba-0dbaa2c38335",
+								"exec": [
+									"postman.setEnvironmentVariable(\"accountIdClient\", \"d8527d95-1b61-4057-9959-cb3bed0fa317\");",
+									"postman.setEnvironmentVariable(\"merchantId\", \"a6181d1c-e947-475b-9076-606396264422\");",
+									"postman.setEnvironmentVariable(\"company_id\", \"b0f60c7e-74d3-4bcd-90b1-30352dc3b984\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authId}}"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"companyId\": \"{{company_id}}\",\r\n  \"type\" : \"CHECKING_ACH\",\r\n  \"accountHolderName\" : \"Bobby Boucher\",\r\n  \"bankRouting\" : \"082000073\",\r\n  \"accountNumber\" : \"852937164973\"\r\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/payment-method",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"payment-method"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"merchantId\": \"{{merchant_id}}\",\r\n  \"type\": \"SAVING\",\r\n  \"accountHolderName\": \"Patrick\",\r\n  \"routing\": \"172899966\",\r\n  \"number\": \"519844\",\r\n  \"acinIsactive\": \"true\"\r\n}"
+								},
+								"url": {
+									"raw": "{{payment_gateway_server}}/accountinfotoken",
+									"host": [
+										"{{payment_gateway_server}}"
+									],
+									"path": [
+										"accountinfotoken"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Create_Client_Account",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "d05c6b19-b4a2-4646-8c9a-e8645a7413af",
+								"exec": [
+									"var randClientId = Math.floor(Math.random() * 9000) + 1000;",
+									"postman.setEnvironmentVariable(\"randClientId\", randClientId);",
+									"",
+									"var names = ['Savage', 'Stephens', 'Sparks', 'Stark', 'Sparks', 'Bottin', 'Jones', 'Arthurson', 'Harden', 'Gray', 'Bryson', 'Matthison', 'Wilson', 'Ivey', 'Netzley', 'Piche','Metz','Cass','Kuzma','Reno','Avis','Saville','Selvey','Stoecker','Auerbach','Eilerman','Holsey','Zepp','Davids','Foster','Sim','Messana','Schloss','Sylvester','Leathers','Niles','Combs','Phillips','Augsburger','Stroman','Beveridge','Gattis','Minnis','Fortes','Ullman','Bunkley','Spivey','Sterrett','Crist','Chow','Lierman','Ashalintubbi','Laura','Crawford','Balmer','Mcmullin','Dussault','Holbrook','Dion','Lechler','Beaton','Elzey','Sams','Irby','Hollaway','Levert','Gough','Croom','Dedman','Hatmaker','Tippetts','Odoms','Banaszak','Viveros','Hempstead','Tower','Atlas','Lozoya','Fulp','Corbo','Chapell','Monier','Selle','Parenti','Karl','Kuehn','Speers','Cambron','Blossom','Peart','Gunter','Hagenbuch','Amend','Tiernan','Ayala','Maclenn','Golden','Colone','Golding','Landreth','Shams','Liddle','Alley','Levy','Barajas','Tetrault','Shue','Lenton','Boss','Weedman','Bergeron','Valls','Pooler','Mollett','Viger','Donnellan','Dedeaux'];",
+									"",
+									"var randName = names[Math.floor(Math.random() * names.length)];",
+									"postman.setEnvironmentVariable(\"randName\", randName);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authId}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"locationId\" : \"{{locationId}}\",\n  \"clientId\" : \"d66d25fe-{{randClientId}}-4956-ae87-71948c1ac795\",\n  \"account\" : {\n    \"name\" : \"Pranati praneet\",\n    \"email\" : \"AbcTest-1959962485@qa4life.com\",\n    \"phone\" : \"1234567890\",\n    \"sevaluation\" : \"ANNUALLY\",\n    \"billingDate\" : \"03-23-2019\",\n    \"paymentMethod\" : {\n      \"type\" : \"BANK_ACCOUNT\",\n      \"bankAccountType\" : \"SAVING\",\n      \"routingNumber\" : \"101000967\",\n      \"accountNumber\" : \"454556\",\n      \"alias\" : \"testalias2\"\n    }\n  }\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/account/location?Content-Type=application/json&Authorization=Bearer {{authId}}",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"account",
+								"location"
+							],
+							"query": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Authorization",
+									"value": "Bearer {{authId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreatePayorAccount_Bank",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "3d1c35df-b9fd-4995-9cfa-69a3de58b6bb",
+								"exec": [
+									"var randMemberId = Math.floor(Math.random() * 90000) + 10000;",
+									"postman.setEnvironmentVariable(\"randMemberId\", randMemberId);",
+									"",
+									"var randlocId = Math.floor(Math.random() * 90000) + 10000;",
+									"postman.setEnvironmentVariable(\"randlocId\", randlocId);",
+									"",
+									"var randPayorId = Math.floor(Math.random() * 9000) + 1000;",
+									"postman.setEnvironmentVariable(\"randPayorId\", randPayorId);",
+									"",
+									"var names = ['Savage', 'Stephens', 'Sparks', 'Stark', 'Sparks', 'Bottin', 'Jones', 'Arthurson', 'Harden', 'Gray', 'Bryson', 'Matthison', 'Wilson', 'Ivey', 'Netzley', 'Piche','Metz','Cass','Kuzma','Reno','Avis','Saville','Selvey','Stoecker','Auerbach','Eilerman','Holsey','Zepp','Davids','Foster','Sim','Messana','Schloss','Sylvester','Leathers','Niles','Combs','Phillips','Augsburger','Stroman','Beveridge','Gattis','Minnis','Fortes','Ullman','Bunkley','Spivey','Sterrett','Crist','Chow','Lierman','Ashalintubbi','Laura','Crawford','Balmer','Mcmullin','Dussault','Holbrook','Dion','Lechler','Beaton','Elzey','Sams','Irby','Hollaway','Levert','Gough','Croom','Dedman','Hatmaker','Tippetts','Odoms','Banaszak','Viveros','Hempstead','Tower','Atlas','Lozoya','Fulp','Corbo','Chapell','Monier','Selle','Parenti','Karl','Kuehn','Speers','Cambron','Blossom','Peart','Gunter','Hagenbuch','Amend','Tiernan','Ayala','Maclenn','Golden','Colone','Golding','Landreth','Shams','Liddle','Alley','Levy','Barajas','Tetrault','Shue','Lenton','Boss','Weedman','Bergeron','Valls','Pooler','Mollett','Viger','Donnellan','Dedeaux'];",
+									"",
+									"var randName = names[Math.floor(Math.random() * names.length)];",
+									"postman.setEnvironmentVariable(\"randName\", randName);",
+									"",
+									"",
+									"var sevaluation = [ 'DAILY', 'WEEKLY',' EVERY_OTHER_WEEK',' MONTHLY', 'EVERY_OTHER_MONTH', 'ANNUALLY', 'QUARTERLY','SEMIANNUALLY'];",
+									"",
+									"var seval = sevaluation[Math.floor(Math.random() * sevaluation.length)];",
+									"postman.setEnvironmentVariable(\"seval\", seval);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "52d10cd3-2057-4747-b332-ba5ec2ed1924",
+								"exec": [
+									"if ( responseCode.code!=201)",
+									"{",
+									"    tests[\"[INFO]  Request Body: \" + JSON.stringify(request)] = true;",
+									"    tests[\"[INFO] Response Body: \" + responseBody] = true;",
+									"}",
+									"",
+									"else if (responseCode.code === 201)",
+									"{",
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"postman.setEnvironmentVariable(\"payoraccountId\", jsonData.account.accountId);",
+									"postman.setEnvironmentVariable(\"payorId\", jsonData.payorId);",
+									"",
+									"tests[\"Response Body has correct Payor Account id\"] = responseBody.has(\"\\\"accountId\\\":\"+\"\\\"\"+postman.getEnvironmentVariable(\"payoraccountId\")+\"\\\"\");",
+									"",
+									"tests[\"Response Body has correct Payor id\"] = responseBody.has(\"\\\"payorId\\\":\"+\"\\\"\"+postman.getEnvironmentVariable(\"payorId\")+\"\\\"\");",
+									"",
+									"}",
+									"tests[\"Response code should be 201\"] = responseCode.code === 201;",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authId}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{  \r\n   \"locationId\":\"{{locationId}}\",\r\n   \"payorId\":\"{{randPayorId}}a030-a23b-4fd4-adf1-db0ab123b602\",\r\n   \"memberId\": \"{{memberId}}\",\r\n   \"account\":{  \r\n      \"name\":\"{{randName}}\",\r\n      \"phone\":\"8009578010\",\r\n      \"sevaluation\":\"{{seval}}\",\r\n     \"billingDate\" : \"12-30-2020\",\r\n      \"paymentMethod\":{\r\n      \"type\" : \"BANK_ACCOUNT\",\r\n      \"tokenId\":\"{{payment_method_id}}\"\r\n    }\r\n   }\r\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/account/member",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"account",
+								"member"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateSubscription",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "7a5c849f-1892-432f-9b72-a07da50776b0",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "2e379ca3-0bdb-4515-bdb5-942b84db6baa",
+								"exec": [
+									"if ( responseCode.code!=201)",
+									"{",
+									"    tests[\"[INFO]  Request Body: \" + JSON.stringify(request)] = true;",
+									"    tests[\"[INFO] Response Body: \" + responseBody] = true;",
+									"}",
+									"",
+									"else if (responseCode.code === 201)",
+									"{",
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"",
+									"}",
+									"tests[\"Response code should be 201\"] = responseCode.code === 201;",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authId}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\"planId\": \"{{planId}}\",\n\"salesEmployeeId\": \"ad8ebc9e-5fab-140f-879f-9e930cc35c79\",\n      \"locationId\": \"{{locationId}}\",\n    \"memberId\": \"{{memberId}}\",\n    \n        \"accountId\": \"{{payoraccountId}}\",\n\"planVersion\": 11,\n\"start\" : \"12-16-2018\",\n\"invoiceDate\" : \"01-03-2019\",\n\"duration\":\"10\",\n\"expirationDate\":\"03-10-2019\",\n\"frequency\" : \"MONTHLY\",\n\"name\" : \"Praveen_Cancel_1\",\n\"autoRenew\":\"false\",\n\"openEnded\": false,\n\"renewType\" : \"TERM\", \n\n\"items\": [\n\n{ \"itemName\": \"{{itemName}}\", \"itemId\": \"{{itemId}}\", \"version\": 1, \"price\": \"{{itemPrice}}\", \"discountCode\": 1234, \"discountAmount\": 10, \"amountRemaining\": 200, \"taxAmount\": 20, \"type\": \"PRODUCT\", \"quantity\": \"1\", \"itemCategoryId\": \"{{itemcategoryId}}\" }\n]\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/subscription/",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"subscription",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create_Charge",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "acc4a36d-e5c8-4392-ba93-8605da29f37d",
+								"exec": [
+									"",
+									"if (responseCode.code != 202)",
+									"{",
+									"  tests[\"[INFO]  Request Body: \" + JSON.stringify(request)] = true;",
+									"  tests[\"[INFO] Response Body: \" + responseBody] = true;",
+									"}",
+									"",
+									"else if (responseCode.code === 202)",
+									"{",
+									"  var jsonData = JSON.parse(responseBody);",
+									"  postman.setEnvironmentVariable(\"charge_id\", jsonData.id);",
+									"",
+									"  tests[\"Response Body has Charge Id\"] = responseBody.has(\"\\\"id\\\":\"+\"\\\"\"+postman.getEnvironmentVariable(\"charge_id\")+\"\\\"\");",
+									"  tests[\"Response Body has Amount\"] = responseBody.has(\"\\\"amount\\\":\"+\"\\\"\"+jsonData.amount+\"\\\"\");",
+									" tests[\"Response Body has referenceId\"] = responseBody.has(\"\\\"referenceId\\\":\"+\"\\\"\"+jsonData.referenceId+\"\\\"\");",
+									" tests[\"Response Body has paymentMethodId\"] = responseBody.has(\"\\\"paymentMethodId\\\":\"+\"\\\"\"+jsonData.paymentMethodId+\"\\\"\");",
+									"}",
+									"",
+									"tests[\"Response code should be 202\"] = responseCode.code === 202;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authId}}"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"merchantId\": \"{{merchantId}}\",\n    \"paymentMethodId\": \"{{payment_method_id}}\",\n    \"amount\": \"300.34 \",\n    \"source\": \"BILLING\",\n    \"referenceId\": \"{{$guid}}\",\n    \"metadata\": {\n        \"clientId\": \"{{$guid}}\",\n        \"payorId\": \"{{$guid}}\"\n    }\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/charge",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"charge"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"merchantId\": \"{{merchant_id}}\",\r\n  \"type\": \"SAVING\",\r\n  \"accountHolderName\": \"Patrick\",\r\n  \"routing\": \"172899966\",\r\n  \"number\": \"519844\",\r\n  \"acinIsactive\": \"true\"\r\n}"
+								},
+								"url": {
+									"raw": "{{payment_gateway_server}}/accountinfotoken",
+									"host": [
+										"{{payment_gateway_server}}"
+									],
+									"path": [
+										"accountinfotoken"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Invoice payor Account",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "248d8db8-7db6-4e0d-bf69-2c0fe5ea4d7b",
+								"exec": [
+									"",
+									"if ( responseCode.code!=201)",
+									"{",
+									"    tests[\"[INFO]  Request Body: \" + JSON.stringify(request)] = true;",
+									"    tests[\"[INFO] Response Body: \" + responseBody] = true;",
+									"}",
+									"",
+									"else if (responseCode.code === 201)",
+									"{",
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"postman.setEnvironmentVariable(\"invoiceId\", jsonData.id);",
+									"tests[\"Response Body has correct Invoice id\"] = responseBody.has(\"\\\"id\\\":\"+\"\\\"\"+postman.getEnvironmentVariable(\"invoiceId\")+\"\\\"\");",
+									"",
+									"}",
+									"tests[\"Response code should be 201\"] = responseCode.code === 201;",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{authId}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"locationId\": \"{{locationId}}\",\r\n        \"accountId\": \"{{payoraccountId}}\",\r\n         \"memberId\": \"{{memberId}}\",\r\n\"salesEmployeeId\": \"ad8ebc9e-5fab-140f-879f-9e930cc35c74\",\r\n\"totalTax\": 0,\r\n\"totalAmount\": 1000,\r\n\"totalDiscountAmount\": 0,\r\n\"totalNetPrice\": 1000,\r\n\"items\": [\r\n\r\n{ \"itemName\": \"dance\", \"itemId\": \"{{itemId}}\", \"version\": 1, \"price\": 200, \"discountCode\": 1234, \"discountAmount\": 10, \"amountRemaining\": 200, \"taxAmount\": 20, \"type\": \"PRODUCT\", \"quantity\": \"1\", \"itemCategoryId\": \"{{itemcategoryId}}\" }\r\n\r\n]\r\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/account/payor/invoice",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"account",
+								"payor",
+								"invoice"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Evaluate Statement",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a6fae571-bcf6-4939-9d48-8baf53615a6a",
+								"exec": [
+									"if ( responseCode.code!=200)",
+									"{",
+									"    tests[\"[INFO]  Request Body: \" + JSON.stringify(request)] = true;",
+									"    tests[\"[INFO] Response Body: \" + responseBody] = true;",
+									"}",
+									"",
+									"else if (responseCode.code === 200)",
+									"{",
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"postman.setEnvironmentVariable(\"statementId\", jsonData.statementId);",
+									"",
+									"",
+									"tests[\"Response Body has correct Statement id\"] = responseBody.has(\"\\\"statementId\\\":\"+\"\\\"\"+postman.getEnvironmentVariable(\"statementId\")+\"\\\"\");",
+									"",
+									"}",
+									"tests[\"Response code should be 200\"] = responseCode.code === 200;",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{authId}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{       \"locationId\": \"{{locationId}}\",\r\n    \"accountId\": \"{{payoraccountId}}\"\r\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/statement",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"statement"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Apply payment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3ee78c95-2e5e-40a2-9c6a-788ab197f991",
+								"exec": [
+									"",
+									"if ( responseCode.code!=201)",
+									"{",
+									"    tests[\"[INFO]  Request Body: \" + JSON.stringify(request)] = true;",
+									"    tests[\"[INFO] Response Body: \" + responseBody] = true;",
+									"}",
+									"",
+									"else if (responseCode.code === 201)",
+									"{",
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"",
+									"}",
+									"tests[\"Response code should be 201\"] = responseCode.code === 201;",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authId}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"payAmount\" : 15,\r\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/apply-payment/account/{{payoraccountId}}",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"apply-payment",
+								"account",
+								"{{payoraccountId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Review Statement",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "88ec3e17-caed-4a53-90a2-594e86ce266d",
+								"exec": [
+									"if (responseCode.code != 200)",
+									"{",
+									"   tests[\"[INFO]  Request Body: \" + JSON.stringify(request)] = true;",
+									"   tests[\"[INFO] Response Body: \" + responseBody] = true;",
+									"}",
+									"",
+									"else if (responseCode.code === 200)",
+									"{",
+									"   tests[\"Response Body has Statement Id\"] = responseBody.has(\"statementId\");",
+									"   tests[\"Response Body has Account ID\"] = responseBody.has(\"accountId\");",
+									"   tests[\"Response Body has Statement Created\"] = responseBody.has(\"statementCreated\");",
+									"   tests[\"Response Body has Statement Amount\"] = responseBody.has(\"statementAmount\");",
+									"}",
+									"",
+									"tests[\"Response code should be 200\"] = responseCode.code === 200;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{authId}}"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{URL}}/account/statement/{{statementId}}",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"account",
+								"statement",
+								"{{statementId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Payment_Gateway",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ac59a76d-73e6-4dd3-b244-71395a7e94ef",
+								"exec": [
+									"if (responseCode.code != 200)",
+									"{",
+									"   tests[\"[INFO]  Request Body: \" + JSON.stringify(request)] = true;",
+									"   tests[\"[INFO] Response Body: \" + responseBody] = true;",
+									"}",
+									"",
+									"else if (responseCode.code === 200)",
+									"{",
+									"   var jsonData = JSON.parse(responseBody);",
+									"   postman.setEnvironmentVariable(\"authId\", jsonData.access_token);",
+									"",
+									"   tests[\"Response Body has Correct Token Type\"] = responseBody.has(\"\\\"token_type\\\":\\\"bearer\\\"\");",
+									"   tests[\"Response Body has Access Token\"] = responseBody.has(\"\\\"access_token\\\":\"+\"\\\"\"+postman.getEnvironmentVariable(\"authId\")+\"\\\"\");",
+									"   tests[\"Response Body has Expiration Field\"] = responseBody.has(\"expires_in\");",
+									"   tests[\"Response Body has Correct Scope\"] = responseBody.has(\"\\\"scope\\\":\"+\"\\\"\"+jsonData.scope+\"\\\"\");",
+									"}",
+									"",
+									"tests[\"Response code should be 200\"] = responseCode.code === 200;"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "2dc7e010-cc77-4026-a19d-ba6c9a86ec3a",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic QVVUT01BVEVEX1RFU1RJTkc6dDNzdEBsbHRoM3RoMW5ncw=="
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{URL}}/token?client_id=AUTOMATED_TESTING&grant_type=client_credentials",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"token"
+							],
+							"query": [
+								{
+									"key": "client_id",
+									"value": "AUTOMATED_TESTING"
+								},
+								{
+									"key": "grant_type",
+									"value": "client_credentials"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"type": "any"
+										},
+										{
+											"key": "password",
+											"type": "any"
+										},
+										{
+											"key": "saveHelperData",
+											"type": "any"
+										},
+										{
+											"key": "showPassword",
+											"value": false,
+											"type": "boolean"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "multipart/form-data"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "username",
+											"value": "{{username}}",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "{{password}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{authorization_server}}/token?client_id=AUTOMATED_TESTING&grant_type=password",
+									"host": [
+										"{{authorization_server}}"
+									],
+									"path": [
+										"token"
+									],
+									"query": [
+										{
+											"key": "client_id",
+											"value": "AUTOMATED_TESTING"
+										},
+										{
+											"key": "grant_type",
+											"value": "password"
+										}
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Processor",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2e57cb7d-fab8-4e44-8515-87a50c27b10e",
+								"exec": [
+									"",
+									"if (responseCode.code != 200)",
+									"{",
+									"   tests[\"[INFO]  Request Body: \" + JSON.stringify(request)] = true;",
+									"   tests[\"[INFO] Response Body: \" + responseBody] = true;",
+									"}",
+									"",
+									"else if (responseCode.code === 200)",
+									"{",
+									"   tests[\"Response Body has Correct Processor Id\"] = responseBody.has(\"id\");",
+									"   tests[\"Response Body has Country\"] = responseBody.has(\"country\");",
+									"   tests[\"Response Body has Name\"] = responseBody.has(\"name\");",
+									"   tests[\"Response Body has Payment Method\"] = responseBody.has(\"paymentMethod\");",
+									"}",
+									"",
+									"tests[\"Response code should be 200\"] = responseCode.code === 200;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authId}}"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{URL}}/processors",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"processors"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{payment_gateway_server}}/processors",
+									"host": [
+										"{{payment_gateway_server}}"
+									],
+									"path": [
+										"processors"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Create_Processor already exist",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d5bae215-a624-48e8-924e-5d897536e052",
+								"exec": [
+									"tests[\"Response code should be 409\"] = responseCode.code === 409;",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "25a64556-b60b-4419-b7f3-06984a468e84",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authId}}"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\" : \"Regions Bank\",\r\n  \"paymentMethod\" : \"EFT\",\r\n  \"country\" : \"US\",\r\n  \"processorFormatDetail\" : {\r\n    \"fileType\" : \"NACHA\",\r\n    \"fileFormat\" : \"abc\",\r\n    \"batchCount\" : 5,\r\n    \"fileExtention\" : \"ach\",\r\n    \"transactionCount\" : 20\r\n  }\r\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/processors",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"processors"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"companyId\": \"{{company_id}}\",\r\n  \"name\": \"DanielsTestClubABCDEFGHI\",\r\n  \"merchantDetails\": {\r\n    \"companyName\": \"Testing Company\",\r\n    \"processors\": [\r\n      \"{{processor_id}}\"\r\n    ]\r\n  },\r\n  \"businessContact\": {\r\n    \"name\": \"company\",\r\n    \"phone\": \"435685869\",\r\n    \"email\": \"testing@k.d\",\r\n    \"extention\": \"481\"\r\n  },\r\n  \"technicalContact\": {\r\n    \"name\": \"Bhavna Company\",\r\n    \"phone\": \"435975869\",\r\n    \"email\": \"testing@tc.com\",\r\n    \"extention\": \"481\"\r\n  }\r\n}"
+								},
+								"url": {
+									"raw": "{{payment_gateway_server}}/merchant",
+									"host": [
+										"{{payment_gateway_server}}"
+									],
+									"path": [
+										"merchant"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "UpdateProcessor",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "bc11e193-840d-4ea5-a24f-349c21033839",
+								"exec": [
+									"if (responseCode.code != 200)",
+									"{",
+									"   tests[\"[INFO]  Request Body: \" + JSON.stringify(request)] = true;",
+									"   tests[\"[INFO] Response Body: \" + responseBody] = true;",
+									"}",
+									"",
+									"else if (responseCode.code === 200)",
+									"{",
+									"   var jsonData = JSON.parse(responseBody);",
+									"   postman.setEnvironmentVariable(\"processor_id\", jsonData.id);",
+									"   postman.setEnvironmentVariable(\"country\", jsonData.country);",
+									"   postman.setEnvironmentVariable(\"paymentMethod\", jsonData.paymentMethod);",
+									"",
+									"   tests[\"Response Body has Correct Processor Id\"] = responseBody.has(\"\\\"id\\\":\"+\"\\\"\"+jsonData.id+\"\\\"\");",
+									"   tests[\"Response Body has Country\"] = responseBody.has(\"\\\"country\\\":\"+\"\\\"\"+jsonData.country+\"\\\"\");",
+									"   tests[\"Response Body has Name\"] = responseBody.has(\"name\");",
+									"   tests[\"Response Body has Payment Method\"] = responseBody.has(\"\\\"paymentMethod\\\":\"+\"\\\"\"+jsonData.paymentMethod+\"\\\"\");",
+									"}",
+									"",
+									"tests[\"Response code should be 200\"] = responseCode.code === 200;",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "76522c16-caf6-49fd-bfd2-a941f7d41dd6",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authId}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{}"
+						},
+						"url": {
+							"raw": "{{URL}}/processors/{{processor_id}}",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"processors",
+								"{{processor_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get_Processor_By_Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "42e99eb3-d9af-4955-a0f2-f67e9a972a6e",
+								"exec": [
+									"if (responseCode.code != 200)",
+									"{",
+									"   tests[\"[INFO]  Request Body: \" + JSON.stringify(request)] = true;",
+									"   tests[\"[INFO] Response Body: \" + responseBody] = true;",
+									"}",
+									"",
+									"else if (responseCode.code === 200)",
+									"{",
+									"    ",
+									"   var jsonData = JSON.parse(responseBody);",
+									"   postman.setEnvironmentVariable(\"processor_id\", jsonData.id);",
+									"   postman.setEnvironmentVariable(\"country\", jsonData.country);",
+									"   postman.setEnvironmentVariable(\"paymentMethod\", jsonData.paymentMethod);",
+									"",
+									"   tests[\"Response Body has Correct Processor Id\"] = responseBody.has(\"\\\"id\\\":\"+\"\\\"\"+jsonData.id+\"\\\"\");",
+									"   tests[\"Response Body has Country\"] = responseBody.has(\"\\\"country\\\":\"+\"\\\"\"+jsonData.country+\"\\\"\");",
+									"   tests[\"Response Body has Name\"] = responseBody.has(\"name\");",
+									"   tests[\"Response Body has Payment Method\"] = responseBody.has(\"\\\"paymentMethod\\\":\"+\"\\\"\"+jsonData.paymentMethod+\"\\\"\");",
+									"}",
+									"",
+									"tests[\"Response code should be 200\"] = responseCode.code === 200;",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authId}}"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{URL}}/processors/{{processor_id}}",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"processors",
+								"{{processor_id}}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{payment_gateway_server}}/processors",
+									"host": [
+										"{{payment_gateway_server}}"
+									],
+									"path": [
+										"processors"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Company",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "49e95ee0-7e54-4d03-a660-927f94cd03ff",
+								"exec": [
+									"",
+									"if (responseCode.code != 201)",
+									"{",
+									"   tests[\"[INFO]  Request Body: \" + JSON.stringify(request)] = true;",
+									"   tests[\"[INFO] Response Body: \" + responseBody] = true;",
+									"}",
+									"",
+									"else if (responseCode.code === 201)",
+									"{",
+									"   var jsonData = JSON.parse(responseBody);",
+									"   postman.setEnvironmentVariable(\"company_id\", jsonData.id);",
+									"",
+									"   tests[\"Response Body has Correct Company Id\"] = responseBody.has(\"\\\"id\\\":\"+\"\\\"\"+postman.getEnvironmentVariable(\"company_id\")+\"\\\"\");",
+									"   tests[\"Response Body has Company AccountToken\"] = responseBody.has(\"\\\"accountToken\\\":\"+\"\\\"\"+jsonData.accountToken+\"\\\"\");",
+									"   tests[\"Response Body has Company Name\"] = responseBody.has(\"\\\"name\\\":\"+\"\\\"\"+jsonData.name+\"\\\"\");",
+									"   postman.setEnvironmentVariable(\"companyname\", jsonData.name);",
+									"}",
+									"",
+									"tests[\"Response code should be 201\"] = responseCode.code === 201;",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "ef96ef78-aaae-4756-8867-e263b40219c4",
+								"exec": [
+									"function stringGen(len) {",
+									"var text = \"\";",
+									"",
+									"var charset = \"abcdefghijklmnopqrstuvwxyz\";",
+									"",
+									"for (var i = 0; i < len; i++)",
+									"  text += charset.charAt(Math.floor(Math.random() * charset.length));",
+									"",
+									"return text;",
+									"}",
+									"var UniqueCompany= stringGen(5)",
+									"postman.setEnvironmentVariable(\"UniqueCompany\", \"Company \"+UniqueCompany);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authId}}"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\" : \"{{UniqueCompany}}\",\r\n  \"accountNumber\" : \"36658\",\r\n  \"accountHolderName\" : \"Mr Test Account Holder\",\r\n  \"routing\" : \"087654321\"\r\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/company",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"company"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Daniels ABC Financial Services LLC\",\r\n  \"accountNumber\": 36658,\r\n  \"accountHolderName\": \"Mr Test Account Holder\",\r\n  \"routing\": \"086543217\",\r\n  \"businessContact\": {\r\n    \"name\": \"company\",\r\n    \"phone\": 435685869,\r\n    \"email\": \"testing@kd.com\",\r\n    \"extention\": \"481\"\r\n  },\r\n  \"technicalContact\": {\r\n    \"name\": \"company\",\r\n    \"phone\": 435975869,\r\n    \"email\": \"testing@tc.com\",\r\n    \"extention\": \"481\"\r\n  }\r\n}"
+								},
+								"url": {
+									"raw": "{{payment_gateway_server}}/company",
+									"host": [
+										"{{payment_gateway_server}}"
+									],
+									"path": [
+										"company"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Company-DuplicateCompanyName",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "49e95ee0-7e54-4d03-a660-927f94cd03ff",
+								"exec": [
+									"",
+									"tests[\"Response code should be 409\"] = responseCode.code === 409;",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "ef96ef78-aaae-4756-8867-e263b40219c4",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authId}}"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"{{companyname}}\",\r\n  \"accountNumber\": 36658,\r\n  \"accountHolderName\": \"Mr Test Account Holder\",\r\n  \"routing\": \"086543217\"\r\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/company",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"company"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Daniels ABC Financial Services LLC\",\r\n  \"accountNumber\": 36658,\r\n  \"accountHolderName\": \"Mr Test Account Holder\",\r\n  \"routing\": \"086543217\",\r\n  \"businessContact\": {\r\n    \"name\": \"company\",\r\n    \"phone\": 435685869,\r\n    \"email\": \"testing@kd.com\",\r\n    \"extention\": \"481\"\r\n  },\r\n  \"technicalContact\": {\r\n    \"name\": \"company\",\r\n    \"phone\": 435975869,\r\n    \"email\": \"testing@tc.com\",\r\n    \"extention\": \"481\"\r\n  }\r\n}"
+								},
+								"url": {
+									"raw": "{{payment_gateway_server}}/company",
+									"host": [
+										"{{payment_gateway_server}}"
+									],
+									"path": [
+										"company"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Get Companies",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "42e99eb3-d9af-4955-a0f2-f67e9a972a6e",
+								"exec": [
+									"if (responseCode.code != 200)",
+									"{",
+									"   tests[\"[INFO]  Request Body: \" + JSON.stringify(request)] = true;",
+									"   tests[\"[INFO] Response Body: \" + responseBody] = true;",
+									"}",
+									"",
+									"else if (responseCode.code === 200)",
+									"{",
+									"   tests[\"Response Body has Company Id\"] = responseBody.has(\"id\");",
+									"   tests[\"Response Body has Company Name\"] = responseBody.has(\"name\");",
+									"   tests[\"Response Body has Company Account Token\"] = responseBody.has(\"accountToken\");",
+									"   tests[\"Response Body has Payment Active\"] = responseBody.has(\"active\");",
+									"}",
+									"",
+									"tests[\"Response code should be 200\"] = responseCode.code === 200;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authId}}"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{URL}}/companies",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"companies"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{payment_gateway_server}}/processors",
+									"host": [
+										"{{payment_gateway_server}}"
+									],
+									"path": [
+										"processors"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "CreateMerchant",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d5bae215-a624-48e8-924e-5d897536e052",
+								"exec": [
+									"if (responseCode.code != 201)",
+									"{",
+									"  tests[\"[INFO]  Request Body: \" + JSON.stringify(request)] = true;",
+									"  tests[\"[INFO] Response Body: \" + responseBody] = true;",
+									"}",
+									"",
+									"else if (responseCode.code === 201)",
+									"{",
+									"  var jsonData = JSON.parse(responseBody);",
+									"  postman.setEnvironmentVariable(\"merchant_id\", jsonData.id);",
+									"",
+									"  tests[\"Response Body has Merchant Id\"] = responseBody.has(\"\\\"id\\\":\"+\"\\\"\"+postman.getEnvironmentVariable(\"merchant_id\")+\"\\\"\");",
+									"  tests[\"Response Body has companyId\"] = responseBody.has(\"\\\"companyId\\\":\"+\"\\\"\"+postman.getEnvironmentVariable(\"company_id\")+\"\\\"\");",
+									"  tests[\"Response Body has merchantAccountToken\"] = responseBody.has(\"\\\"merchantAccountToken\\\":\"+\"\\\"\"+jsonData.merchantAccountToken+\"\\\"\");",
+									"",
+									"}",
+									"",
+									"tests[\"Response code should be 201\"] = responseCode.code === 201;",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "25a64556-b60b-4419-b7f3-06984a468e84",
+								"exec": [
+									"function stringGen(len) {",
+									"var text = \"\";",
+									"",
+									"var charset = \"abcdefghijklmnopqrstuvwxyz\";",
+									"",
+									"for (var i = 0; i < len; i++)",
+									" text += charset.charAt(Math.floor(Math.random() * charset.length));",
+									"",
+									"return text;",
+									"}",
+									"var UniqueMerchant= stringGen(5)",
+									"postman.setEnvironmentVariable(\"UniqueMerchant\", \"Merchant \"+UniqueMerchant);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authId}}"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n \"companyId\": \"{{company_id}}\",\n \"name\": \"{{UniqueMerchant}}\",\n \"merchantDetails\": {\n   \"companyName\": \"Testing Company\",\n   \"processors\": [\n     \"{{processor_id}}\"\n   ]\n }\n}\n\n"
+						},
+						"url": {
+							"raw": "{{URL}}/merchant",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"merchant"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"companyId\": \"{{company_id}}\",\r\n  \"name\": \"DanielsTestClubABCDEFGHI\",\r\n  \"merchantDetails\": {\r\n    \"companyName\": \"Testing Company\",\r\n    \"processors\": [\r\n      \"{{processor_id}}\"\r\n    ]\r\n  },\r\n  \"businessContact\": {\r\n    \"name\": \"company\",\r\n    \"phone\": \"435685869\",\r\n    \"email\": \"testing@k.d\",\r\n    \"extention\": \"481\"\r\n  },\r\n  \"technicalContact\": {\r\n    \"name\": \"Bhavna Company\",\r\n    \"phone\": \"435975869\",\r\n    \"email\": \"testing@tc.com\",\r\n    \"extention\": \"481\"\r\n  }\r\n}"
+								},
+								"url": {
+									"raw": "{{payment_gateway_server}}/merchant",
+									"host": [
+										"{{payment_gateway_server}}"
+									],
+									"path": [
+										"merchant"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Activate Merchant",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d9448e6a-c239-442d-925b-ec3128ed808c",
+								"exec": [
+									"if (responseCode.code != 200)",
+									"{",
+									"   tests[\"[INFO]  Request Body: \" + JSON.stringify(request)] = true;",
+									"   tests[\"[INFO] Response Body: \" + responseBody] = true;",
+									"}",
+									"",
+									"else if (responseCode.code === 200)",
+									"{",
+									"   var jsonData = JSON.parse(responseBody);",
+									"   postman.setEnvironmentVariable(\"merchant_id\", jsonData.id);",
+									"",
+									"   tests[\"Response Body has Merchant Id\"] = responseBody.has(\"\\\"id\\\":\"+\"\\\"\"+postman.getEnvironmentVariable(\"merchant_id\")+\"\\\"\");",
+									"   tests[\"Response Body has merchantAccountToken\"] = responseBody.has(\"\\\"merchantAccountToken\\\":\"+\"\\\"\"+jsonData.merchantAccountToken+\"\\\"\");",
+									"}",
+									"",
+									"tests[\"Response code should be 200\"] = responseCode.code === 200;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authId}}"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{URL}}/merchants/activate/{{merchant_id}}",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"merchants",
+								"activate",
+								"{{merchant_id}}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{payment_gateway_server}}/merchants/activate/{{merchant_id}}",
+									"host": [
+										"{{payment_gateway_server}}"
+									],
+									"path": [
+										"merchants",
+										"activate",
+										"{{merchant_id}}"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "UpdateMerchant-MerchantName",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "44d195ac-1df3-4a01-873c-32c3a9dc7137",
+								"exec": [
+									"",
+									"tests[\"Response code should be 400\"] = responseCode.code === 400;",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "3f030847-87b8-465f-9093-200087f171dc",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authId}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\n \"name\": \"MerchantABC\"\n\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/merchants/{{merchant_id}}",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"merchants",
+								"{{merchant_id}}"
+							]
+						},
+						"description": "Get Merchant By Id"
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateMerchant",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "44d195ac-1df3-4a01-873c-32c3a9dc7137",
+								"exec": [
+									"if (responseCode.code != 200)",
+									"{",
+									"  tests[\"[INFO]  Request Body: \" + JSON.stringify(request)] = true;",
+									"  tests[\"[INFO] Response Body: \" + responseBody] = true;",
+									"}",
+									"",
+									"else if (responseCode.code === 200)",
+									"{",
+									"  var jsonData = JSON.parse(responseBody);",
+									"  postman.setEnvironmentVariable(\"merchant_id\", jsonData.id);",
+									"",
+									"  tests[\"Response Body has Merchant Id\"] = responseBody.has(\"\\\"id\\\":\"+\"\\\"\"+postman.getEnvironmentVariable(\"merchant_id\")+\"\\\"\");",
+									"  tests[\"Response Body has merchantAccountToken\"] = responseBody.has(\"\\\"merchantAccountToken\\\":\"+\"\\\"\"+jsonData.merchantAccountToken+\"\\\"\");",
+									"",
+									"}",
+									"",
+									"tests[\"Response code should be 200\"] = responseCode.code === 200;",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "3f030847-87b8-465f-9093-200087f171dc",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authId}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\n \"name\": \"{{UniqueMerchant}}\"\n\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/merchants/{{merchant_id}}",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"merchants",
+								"{{merchant_id}}"
+							]
+						},
+						"description": "Get Merchant By Id"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Merchants By Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d5bae215-a624-48e8-924e-5d897536e052",
+								"exec": [
+									"if (responseCode.code != 200)",
+									"{",
+									"   tests[\"[INFO]  Request Body: \" + JSON.stringify(request)] = true;",
+									"   tests[\"[INFO] Response Body: \" + responseBody] = true;",
+									"}",
+									"",
+									"else if (responseCode.code === 200)",
+									"{",
+									"   tests[\"Response Body has Company Merchant Id\"] = responseBody.has(\"id\");",
+									"   tests[\"Response Body has Company company Id\"] = responseBody.has(\"companyId\");",
+									"   tests[\"Response Body has Company MerchantAccountToken\"] = responseBody.has(\"merchantAccountToken\");",
+									"   tests[\"Response Body has Payment Active\"] = responseBody.has(\"active\");",
+									"}",
+									"",
+									"tests[\"Response code should be 200\"] = responseCode.code === 200;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authId}}"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{URL}}/merchants/{{merchant_id}}",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"merchants",
+								"{{merchant_id}}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{payment_gateway_server}}/processors",
+									"host": [
+										"{{payment_gateway_server}}"
+									],
+									"path": [
+										"processors"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Get_List_Of_Merchants",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d5bae215-a624-48e8-924e-5d897536e052",
+								"exec": [
+									"if (responseCode.code != 200)",
+									"{",
+									"   tests[\"[INFO]  Request Body: \" + JSON.stringify(request)] = true;",
+									"   tests[\"[INFO] Response Body: \" + responseBody] = true;",
+									"}",
+									"",
+									"else if (responseCode.code === 200)",
+									"{",
+									"   tests[\"Response Body has Company Merchant Id\"] = responseBody.has(\"id\");",
+									"   tests[\"Response Body has Company company Id\"] = responseBody.has(\"companyId\");",
+									"   tests[\"Response Body has Company MerchantAccountToken\"] = responseBody.has(\"merchantAccountToken\");",
+									"   tests[\"Response Body has Payment Active\"] = responseBody.has(\"active\");",
+									"}",
+									"",
+									"tests[\"Response code should be 200\"] = responseCode.code === 200;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authId}}"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{URL}}/merchant",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"merchant"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{payment_gateway_server}}/processors",
+									"host": [
+										"{{payment_gateway_server}}"
+									],
+									"path": [
+										"processors"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Payment Method-Invalid Company Name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a588ba23-1ff4-4c40-a87e-fdd35804b4ac",
+								"exec": [
+									"if (responseCode.code != 400)",
+									"{",
+									"   tests[\"[INFO]  Request Body: \" + JSON.stringify(request)] = true;",
+									"   tests[\"[INFO] Response Body: \" + responseBody] = true;",
+									"}",
+									"",
+									"else if (responseCode.code === 400)",
+									"{",
+									"",
+									"}",
+									"   ",
+									"tests[\"Response code should be 400\"] = responseCode.code === 400;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authId}}"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"companyId\": \"787238xcnhdhdvfhdfh\",\r\n  \"type\" : \"CHECKING_ACH\",\r\n  \"accountHolderName\" : \"Bobby Boucher\",\r\n  \"bankRouting\" : \"082000073\",\r\n  \"accountNumber\" : \"852937164973\"\r\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/payment-method",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"payment-method"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"merchantId\": \"{{merchant_id}}\",\r\n  \"type\": \"SAVING\",\r\n  \"accountHolderName\": \"Patrick\",\r\n  \"routing\": \"172899966\",\r\n  \"number\": \"519844\",\r\n  \"acinIsactive\": \"true\"\r\n}"
+								},
+								"url": {
+									"raw": "{{payment_gateway_server}}/accountinfotoken",
+									"host": [
+										"{{payment_gateway_server}}"
+									],
+									"path": [
+										"accountinfotoken"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Payment Method",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a588ba23-1ff4-4c40-a87e-fdd35804b4ac",
+								"exec": [
+									"if (responseCode.code != 201)",
+									"{",
+									"   tests[\"[INFO]  Request Body: \" + JSON.stringify(request)] = true;",
+									"   tests[\"[INFO] Response Body: \" + responseBody] = true;",
+									"}",
+									"",
+									"else if (responseCode.code === 201)",
+									"{",
+									"   var jsonData = JSON.parse(responseBody);",
+									"   postman.setEnvironmentVariable(\"payment_method_id\", jsonData.id);",
+									"",
+									"   tests[\"Response Body has Payment Method  Id\"] = responseBody.has(\"\\\"id\\\":\"+\"\\\"\"+postman.getEnvironmentVariable(\"payment_method_id\")+\"\\\"\");",
+									"   tests[\"Response Body has accountHolderName\"] = responseBody.has(\"\\\"accountHolderName\\\":\"+\"\\\"\"+jsonData.accountHolderName+\"\\\"\");",
+									"}",
+									"   ",
+									"tests[\"Response code should be 200\"] = responseCode.code === 201;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authId}}"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"companyId\": \"{{company_id}}\",\r\n  \"type\" : \"CHECKING_ACH\",\r\n  \"accountHolderName\" : \"Bobby Boucher\",\r\n  \"bankRouting\" : \"082000073\",\r\n  \"accountNumber\" : \"852937164973\"\r\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/payment-method",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"payment-method"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"merchantId\": \"{{merchant_id}}\",\r\n  \"type\": \"SAVING\",\r\n  \"accountHolderName\": \"Patrick\",\r\n  \"routing\": \"172899966\",\r\n  \"number\": \"519844\",\r\n  \"acinIsactive\": \"true\"\r\n}"
+								},
+								"url": {
+									"raw": "{{payment_gateway_server}}/accountinfotoken",
+									"host": [
+										"{{payment_gateway_server}}"
+									],
+									"path": [
+										"accountinfotoken"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "CreateCharge",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "78c6efe2-67c9-4e5e-ab25-39cb5d010024",
+								"exec": [
+									"if (responseCode.code != 202)",
+									"{",
+									"   tests[\"[INFO]  Request Body: \" + JSON.stringify(request)] = true;",
+									"   tests[\"[INFO] Response Body: \" + responseBody] = true;",
+									"}",
+									"",
+									"else if (responseCode.code === 202)",
+									"{",
+									"   var jsonData = JSON.parse(responseBody);",
+									"   postman.setEnvironmentVariable(\"charge_id\", jsonData.id);",
+									"",
+									"   tests[\"Response Body has Charge Id\"] = responseBody.has(\"\\\"id\\\":\"+\"\\\"\"+postman.getEnvironmentVariable(\"charge_id\")+\"\\\"\");",
+									"   tests[\"Response Body has Amount\"] = responseBody.has(\"\\\"amount\\\":\"+\"\\\"\"+jsonData.amount+\"\\\"\");",
+									"  tests[\"Response Body has referenceId\"] = responseBody.has(\"\\\"referenceId\\\":\"+\"\\\"\"+jsonData.referenceId+\"\\\"\");",
+									"  tests[\"Response Body has paymentMethodId\"] = responseBody.has(\"\\\"paymentMethodId\\\":\"+\"\\\"\"+jsonData.paymentMethodId+\"\\\"\");",
+									"}",
+									"",
+									"tests[\"Response code should be 202\"] = responseCode.code === 202;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authId}}"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"merchantId\": \"{{merchant_id}}\",\n    \"paymentMethodId\": \"{{payment_method_id}}\",\n    \"amount\": \"300.34 \",\n    \"source\": \"BILLING\",\n    \"referenceId\": \"{{$guid}}\",\n    \"metadata\": {\n        \"clientId\": \"{{$guid}}\",\n        \"payorId\": \"{{$guid}}\"\n    }\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/charge",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"charge"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"merchantId\": \"{{merchant_id}}\",\r\n  \"type\": \"SAVING\",\r\n  \"accountHolderName\": \"Patrick\",\r\n  \"routing\": \"172899966\",\r\n  \"number\": \"519844\",\r\n  \"acinIsactive\": \"true\"\r\n}"
+								},
+								"url": {
+									"raw": "{{payment_gateway_server}}/accountinfotoken",
+									"host": [
+										"{{payment_gateway_server}}"
+									],
+									"path": [
+										"accountinfotoken"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "GetCharge",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "78c6efe2-67c9-4e5e-ab25-39cb5d010024",
+								"exec": [
+									"if (responseCode.code != 200)",
+									"{",
+									"   tests[\"[INFO]  Request Body: \" + JSON.stringify(request)] = true;",
+									"   tests[\"[INFO] Response Body: \" + responseBody] = true;",
+									"}",
+									"",
+									"else if (responseCode.code === 200)",
+									"{",
+									"   var jsonData = JSON.parse(responseBody);",
+									" ",
+									"   tests[\"Response Body has Charge Id\"] = responseBody.has(\"\\\"id\\\":\"+\"\\\"\"+postman.getEnvironmentVariable(\"charge_id\")+\"\\\"\");",
+									"   tests[\"Response Body has Amount\"] = responseBody.has(\"\\\"amount\\\":\"+\"\\\"\"+jsonData.amount+\"\\\"\");",
+									"  tests[\"Response Body has referenceId\"] = responseBody.has(\"\\\"referenceId\\\":\"+\"\\\"\"+jsonData.referenceId+\"\\\"\");",
+									"  tests[\"Response Body has paymentMethodId\"] = responseBody.has(\"\\\"paymentMethodId\\\":\"+\"\\\"\"+jsonData.paymentMethodId+\"\\\"\");",
+									"}",
+									"",
+									"tests[\"Response code should be 200\"] = responseCode.code === 200;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authId}}"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{URL}}/charge/{{charge_id}}",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"charge",
+								"{{charge_id}}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"merchantId\": \"{{merchant_id}}\",\r\n  \"type\": \"SAVING\",\r\n  \"accountHolderName\": \"Patrick\",\r\n  \"routing\": \"172899966\",\r\n  \"number\": \"519844\",\r\n  \"acinIsactive\": \"true\"\r\n}"
+								},
+								"url": {
+									"raw": "{{payment_gateway_server}}/accountinfotoken",
+									"host": [
+										"{{payment_gateway_server}}"
+									],
+									"path": [
+										"accountinfotoken"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "DeleteMerchant",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ad368af3-73a7-48e1-9222-f4c633d6aed8",
+								"exec": [
+									"if (responseCode.code != 200)",
+									"{",
+									"  tests[\"[INFO]  Request Body: \" + JSON.stringify(request)] = true;",
+									"  tests[\"[INFO] Response Body: \" + responseBody] = true;",
+									"}",
+									"",
+									"else if (responseCode.code === 200)",
+									"{",
+									"  var jsonData = JSON.parse(responseBody);",
+									"",
+									"  tests[\"Response Body has Merchant\"] = responseBody.has(\"\\\"id\\\":\"+\"\\\"\"+jsonData.id+\"\\\"\");",
+									"",
+									"}",
+									"",
+									"tests[\"Merchant Deleted,Response code should be 200\"] = responseCode.code === 200;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authId}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{URL}}/merchants/{{merchant_id}}",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"merchants",
+								"{{merchant_id}}"
+							]
+						},
+						"description": "Delete Merchant By Id"
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteCompany",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0dcfd62b-bcaa-4f76-9bf5-d80e3b6c1105",
+								"exec": [
+									"if (responseCode.code != 200)",
+									"{",
+									"  tests[\"[INFO]  Request Body: \" + JSON.stringify(request)] = true;",
+									"  tests[\"[INFO] Response Body: \" + responseBody] = true;",
+									"}",
+									"",
+									"else if (responseCode.code === 200)",
+									"{",
+									"  var jsonData = JSON.parse(responseBody);",
+									"",
+									"  tests[\"Response Body has companyId\"] = responseBody.has(\"\\\"id\\\":\"+\"\\\"\"+jsonData.id+\"\\\"\");",
+									"}",
+									"",
+									"tests[\"Company Deleted,Response code should be 200\"] = responseCode.code === 200;",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authId}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{URL}}/company/{{company_id}}",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"company",
+								"{{company_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Payment_Gateway No File",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ac59a76d-73e6-4dd3-b244-71395a7e94ef",
+								"exec": [
+									"if (responseCode.code != 200)",
+									"{",
+									"   tests[\"[INFO]  Request Body: \" + JSON.stringify(request)] = true;",
+									"   tests[\"[INFO] Response Body: \" + responseBody] = true;",
+									"}",
+									"",
+									"else if (responseCode.code === 200)",
+									"{",
+									"   var jsonData = JSON.parse(responseBody);",
+									"   postman.setEnvironmentVariable(\"authId\", jsonData.access_token);",
+									"",
+									"   tests[\"Response Body has Correct Token Type\"] = responseBody.has(\"\\\"token_type\\\":\\\"bearer\\\"\");",
+									"   tests[\"Response Body has Access Token\"] = responseBody.has(\"\\\"access_token\\\":\"+\"\\\"\"+postman.getEnvironmentVariable(\"authId\")+\"\\\"\");",
+									"   tests[\"Response Body has Expiration Field\"] = responseBody.has(\"expires_in\");",
+									"   tests[\"Response Body has Correct Scope\"] = responseBody.has(\"\\\"scope\\\":\"+\"\\\"\"+jsonData.scope+\"\\\"\");",
+									"}",
+									"",
+									"tests[\"Response code should be 200\"] = responseCode.code === 200;"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "2dc7e010-cc77-4026-a19d-ba6c9a86ec3a",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic QVVUT01BVEVEX1RFU1RJTkc6dDNzdEBsbHRoM3RoMW5ncw=="
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{URL}}/token?client_id=AUTOMATED_TESTING&grant_type=client_credentials",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"token"
+							],
+							"query": [
+								{
+									"key": "client_id",
+									"value": "AUTOMATED_TESTING"
+								},
+								{
+									"key": "grant_type",
+									"value": "client_credentials"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"type": "any"
+										},
+										{
+											"key": "password",
+											"type": "any"
+										},
+										{
+											"key": "saveHelperData",
+											"type": "any"
+										},
+										{
+											"key": "showPassword",
+											"value": false,
+											"type": "boolean"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "multipart/form-data"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "username",
+											"value": "{{username}}",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "{{password}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{authorization_server}}/token?client_id=AUTOMATED_TESTING&grant_type=password",
+									"host": [
+										"{{authorization_server}}"
+									],
+									"path": [
+										"token"
+									],
+									"query": [
+										{
+											"key": "client_id",
+											"value": "AUTOMATED_TESTING"
+										},
+										{
+											"key": "grant_type",
+											"value": "password"
+										}
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Processor",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2e57cb7d-fab8-4e44-8515-87a50c27b10e",
+								"exec": [
+									"",
+									"if (responseCode.code != 200)",
+									"{",
+									"   tests[\"[INFO]  Request Body: \" + JSON.stringify(request)] = true;",
+									"   tests[\"[INFO] Response Body: \" + responseBody] = true;",
+									"}",
+									"",
+									"else if (responseCode.code === 200)",
+									"{",
+									"   tests[\"Response Body has Correct Processor Id\"] = responseBody.has(\"id\");",
+									"   tests[\"Response Body has Country\"] = responseBody.has(\"country\");",
+									"   tests[\"Response Body has Name\"] = responseBody.has(\"name\");",
+									"   tests[\"Response Body has Payment Method\"] = responseBody.has(\"paymentMethod\");",
+									"}",
+									"",
+									"tests[\"Response code should be 200\"] = responseCode.code === 200;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authId}}"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{URL}}/processors",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"processors"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{payment_gateway_server}}/processors",
+									"host": [
+										"{{payment_gateway_server}}"
+									],
+									"path": [
+										"processors"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Create_Processor without EFT and US",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d5bae215-a624-48e8-924e-5d897536e052",
+								"exec": [
+									"if (responseCode.code != 201)",
+									"{",
+									"   tests[\"[INFO]  Request Body: \" + JSON.stringify(request)] = true;",
+									"   tests[\"[INFO] Response Body: \" + responseBody] = true;",
+									"}",
+									"",
+									"else if (responseCode.code === 201)",
+									"{",
+									"    ",
+									"   var jsonData = JSON.parse(responseBody);",
+									"   postman.setEnvironmentVariable(\"PROCESSOR_ID\", jsonData.id);",
+									"",
+									"   tests[\"Response Body has Correct Processor Id\"] = responseBody.has(\"\\\"id\\\":\"+\"\\\"\"+jsonData.id+\"\\\"\");",
+									"   tests[\"Response Body has Country\"] = responseBody.has(\"\\\"country\\\":\"+\"\\\"\"+jsonData.country+\"\\\"\");",
+									"   tests[\"Response Body has Name\"] = responseBody.has(\"name\");",
+									"   tests[\"Response Body has Payment Method\"] = responseBody.has(\"\\\"paymentMethod\\\":\"+\"\\\"\"+jsonData.paymentMethod+\"\\\"\");",
+									"}",
+									"",
+									"tests[\"Response code should be 201\"] = responseCode.code === 201;",
+									"",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "25a64556-b60b-4419-b7f3-06984a468e84",
+								"exec": [
+									"function stringGen(len) {",
+									"var text = \"\";",
+									"",
+									"var charset = \"abcdefghijklmnopqrstuvwxyz\";",
+									"",
+									"for (var i = 0; i < len; i++)",
+									" text += charset.charAt(Math.floor(Math.random() * charset.length));",
+									"",
+									"return text;",
+									"}",
+									"var UniqueCountry= stringGen(2)",
+									"postman.setEnvironmentVariable(\"UniqueCountry\", UniqueCountry);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authId}}"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\" : \"ABC Bank\",\r\n  \"paymentMethod\" : \"EFT\",\r\n  \"country\" : \"{{UniqueCountry}}\",\r\n  \"processorFormatDetail\" : {\r\n    \"fileType\" : \"NACHA\",\r\n    \"fileFormat\" : \"abc\",\r\n    \"batchCount\" : 5,\r\n    \"fileExtention\" : \"ach\",\r\n    \"transactionCount\" : 20\r\n  }\r\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/processors",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"processors"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"companyId\": \"{{company_id}}\",\r\n  \"name\": \"DanielsTestClubABCDEFGHI\",\r\n  \"merchantDetails\": {\r\n    \"companyName\": \"Testing Company\",\r\n    \"processors\": [\r\n      \"{{processor_id}}\"\r\n    ]\r\n  },\r\n  \"businessContact\": {\r\n    \"name\": \"company\",\r\n    \"phone\": \"435685869\",\r\n    \"email\": \"testing@k.d\",\r\n    \"extention\": \"481\"\r\n  },\r\n  \"technicalContact\": {\r\n    \"name\": \"Bhavna Company\",\r\n    \"phone\": \"435975869\",\r\n    \"email\": \"testing@tc.com\",\r\n    \"extention\": \"481\"\r\n  }\r\n}"
+								},
+								"url": {
+									"raw": "{{payment_gateway_server}}/merchant",
+									"host": [
+										"{{payment_gateway_server}}"
+									],
+									"path": [
+										"merchant"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Create_Originator",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "36f8e22c-f0f3-421e-95f9-945ca7662a0f",
+								"exec": [
+									"tests[\"Response code should be 201\"] = responseCode.code === 201;",
+									"",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authId}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n      \"immediateOriginBankAssignedId\": \"1710602711\",\n      \"immediateOriginName\": \"ABC FINANCIAL\",\n      \"originatorDfiIdentifier\": \"11\",\n      \"originatorStatusCode\":\"1\",\n       \"processor\": {\n        \t\"id\":\"{{PROCESSOR_ID}}\"\n        }\n  }"
+						},
+						"url": {
+							"raw": "{{URL}}/processors/nacha-info/originators",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"processors",
+								"nacha-info",
+								"originators"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create_Destination",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7139bfa3-2a1c-4cc1-8e4c-14e17fa79d71",
+								"exec": [
+									"tests[\"Response code should be 201\"] = responseCode.code === 201;",
+									"",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authId}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "  {\n       \"fileIdModifier\": \"R\",\n        \"formatCode\": \"1\",\n        \"blockingFactor\": \"10\",\n        \"priorityCode\": \"01\",\n        \"immediateDestination\": \"062000021\",\n        \"destinationBankName\": \"REGIONS BANK\",\n        \"referenceCode\": \"XXXXXXXX\",\n        \"processor\": {\n        \t\"id\":\"{{PROCESSOR_ID}}\"\n        }\n    }"
+						},
+						"url": {
+							"raw": "{{URL}}/processors/nacha-info/destinations",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"processors",
+								"nacha-info",
+								"destinations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get_Processor_By_Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "42e99eb3-d9af-4955-a0f2-f67e9a972a6e",
+								"exec": [
+									"if (responseCode.code != 200)",
+									"{",
+									"   tests[\"[INFO]  Request Body: \" + JSON.stringify(request)] = true;",
+									"   tests[\"[INFO] Response Body: \" + responseBody] = true;",
+									"}",
+									"",
+									"else if (responseCode.code === 200)",
+									"{",
+									"    ",
+									"   var jsonData = JSON.parse(responseBody);",
+									"   postman.setEnvironmentVariable(\"processor_id\", jsonData.id);",
+									"   postman.setEnvironmentVariable(\"country\", jsonData.country);",
+									"   postman.setEnvironmentVariable(\"paymentMethod\", jsonData.paymentMethod);",
+									"",
+									"   tests[\"Response Body has Correct Processor Id\"] = responseBody.has(\"\\\"id\\\":\"+\"\\\"\"+jsonData.id+\"\\\"\");",
+									"   tests[\"Response Body has Country\"] = responseBody.has(\"\\\"country\\\":\"+\"\\\"\"+jsonData.country+\"\\\"\");",
+									"   tests[\"Response Body has Name\"] = responseBody.has(\"name\");",
+									"   tests[\"Response Body has Payment Method\"] = responseBody.has(\"\\\"paymentMethod\\\":\"+\"\\\"\"+jsonData.paymentMethod+\"\\\"\");",
+									"}",
+									"",
+									"tests[\"Response code should be 200\"] = responseCode.code === 200;",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authId}}"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{URL}}/processors/{{processor_id}}",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"processors",
+								"{{processor_id}}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{payment_gateway_server}}/processors",
+									"host": [
+										"{{payment_gateway_server}}"
+									],
+									"path": [
+										"processors"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Company",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "42e99eb3-d9af-4955-a0f2-f67e9a972a6e",
+								"exec": [
+									"",
+									"if (responseCode.code != 201)",
+									"{",
+									"   tests[\"[INFO]  Request Body: \" + JSON.stringify(request)] = true;",
+									"   tests[\"[INFO] Response Body: \" + responseBody] = true;",
+									"}",
+									"",
+									"else if (responseCode.code === 201)",
+									"{",
+									"   var jsonData = JSON.parse(responseBody);",
+									"   postman.setEnvironmentVariable(\"company_id\", jsonData.id);",
+									"",
+									"   tests[\"Response Body has Correct Company Id\"] = responseBody.has(\"\\\"id\\\":\"+\"\\\"\"+postman.getEnvironmentVariable(\"company_id\")+\"\\\"\");",
+									"   tests[\"Response Body has Company AccountToken\"] = responseBody.has(\"\\\"accountToken\\\":\"+\"\\\"\"+jsonData.accountToken+\"\\\"\");",
+									"   tests[\"Response Body has Company Name\"] = responseBody.has(\"\\\"name\\\":\"+\"\\\"\"+jsonData.name+\"\\\"\");",
+									"   postman.setEnvironmentVariable(\"companyname\", jsonData.name);",
+									"}",
+									"",
+									"tests[\"Response code should be 201\"] = responseCode.code === 201;",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "c7bff69b-7dd2-4770-9491-39e4dfcc90b9",
+								"exec": [
+									"function stringGen(len) {",
+									"var text = \"\";",
+									"",
+									"var charset = \"abcdefghijklmnopqrstuvwxyz\";",
+									"",
+									"for (var i = 0; i < len; i++)",
+									"  text += charset.charAt(Math.floor(Math.random() * charset.length));",
+									"",
+									"return text;",
+									"}",
+									"var UniqueCompany= stringGen(5)",
+									"postman.setEnvironmentVariable(\"UniqueCompany\", \"Company \"+UniqueCompany);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authId}}"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\" : \"{{UniqueCompany}}\",\r\n  \"accountNumber\" : \"36658\",\r\n  \"accountHolderName\" : \"Mr Test Account Holder\",\r\n  \"routing\" : \"087654321\"\r\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/company",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"company"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Daniels ABC Financial Services LLC\",\r\n  \"accountNumber\": 36658,\r\n  \"accountHolderName\": \"Mr Test Account Holder\",\r\n  \"routing\": \"086543217\",\r\n  \"businessContact\": {\r\n    \"name\": \"company\",\r\n    \"phone\": 435685869,\r\n    \"email\": \"testing@kd.com\",\r\n    \"extention\": \"481\"\r\n  },\r\n  \"technicalContact\": {\r\n    \"name\": \"company\",\r\n    \"phone\": 435975869,\r\n    \"email\": \"testing@tc.com\",\r\n    \"extention\": \"481\"\r\n  }\r\n}"
+								},
+								"url": {
+									"raw": "{{payment_gateway_server}}/company",
+									"host": [
+										"{{payment_gateway_server}}"
+									],
+									"path": [
+										"company"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "CreateMerchant",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d5bae215-a624-48e8-924e-5d897536e052",
+								"exec": [
+									"if (responseCode.code != 201)",
+									"{",
+									"  tests[\"[INFO]  Request Body: \" + JSON.stringify(request)] = true;",
+									"  tests[\"[INFO] Response Body: \" + responseBody] = true;",
+									"}",
+									"",
+									"else if (responseCode.code === 201)",
+									"{",
+									"  var jsonData = JSON.parse(responseBody);",
+									"  postman.setEnvironmentVariable(\"merchant_id\", jsonData.id);",
+									"",
+									"  tests[\"Response Body has Merchant Id\"] = responseBody.has(\"\\\"id\\\":\"+\"\\\"\"+postman.getEnvironmentVariable(\"merchant_id\")+\"\\\"\");",
+									"  tests[\"Response Body has companyId\"] = responseBody.has(\"\\\"companyId\\\":\"+\"\\\"\"+postman.getEnvironmentVariable(\"company_id\")+\"\\\"\");",
+									"  tests[\"Response Body has merchantAccountToken\"] = responseBody.has(\"\\\"merchantAccountToken\\\":\"+\"\\\"\"+jsonData.merchantAccountToken+\"\\\"\");",
+									"",
+									"}",
+									"",
+									"tests[\"Response code should be 201\"] = responseCode.code === 201;",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "25a64556-b60b-4419-b7f3-06984a468e84",
+								"exec": [
+									"function stringGen(len) {",
+									"var text = \"\";",
+									"",
+									"var charset = \"abcdefghijklmnopqrstuvwxyz\";",
+									"",
+									"for (var i = 0; i < len; i++)",
+									" text += charset.charAt(Math.floor(Math.random() * charset.length));",
+									"",
+									"return text;",
+									"}",
+									"var UniqueMerchant= stringGen(5)",
+									"postman.setEnvironmentVariable(\"UniqueMerchant\", \"Merchant \"+UniqueMerchant);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authId}}"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n \"companyId\": \"{{company_id}}\",\n \"name\": \"{{UniqueMerchant}}\",\n \"merchantDetails\": {\n   \"companyName\": \"Testing Company\",\n   \"processors\": [\n     \"{{PROCESSOR_ID}}\"\n   ]\n }\n}\n\n"
+						},
+						"url": {
+							"raw": "{{URL}}/merchant",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"merchant"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"companyId\": \"{{company_id}}\",\r\n  \"name\": \"DanielsTestClubABCDEFGHI\",\r\n  \"merchantDetails\": {\r\n    \"companyName\": \"Testing Company\",\r\n    \"processors\": [\r\n      \"{{processor_id}}\"\r\n    ]\r\n  },\r\n  \"businessContact\": {\r\n    \"name\": \"company\",\r\n    \"phone\": \"435685869\",\r\n    \"email\": \"testing@k.d\",\r\n    \"extention\": \"481\"\r\n  },\r\n  \"technicalContact\": {\r\n    \"name\": \"Bhavna Company\",\r\n    \"phone\": \"435975869\",\r\n    \"email\": \"testing@tc.com\",\r\n    \"extention\": \"481\"\r\n  }\r\n}"
+								},
+								"url": {
+									"raw": "{{payment_gateway_server}}/merchant",
+									"host": [
+										"{{payment_gateway_server}}"
+									],
+									"path": [
+										"merchant"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Activate Merchant",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d9448e6a-c239-442d-925b-ec3128ed808c",
+								"exec": [
+									"if (responseCode.code != 200)",
+									"{",
+									"   tests[\"[INFO]  Request Body: \" + JSON.stringify(request)] = true;",
+									"   tests[\"[INFO] Response Body: \" + responseBody] = true;",
+									"}",
+									"",
+									"else if (responseCode.code === 200)",
+									"{",
+									"   var jsonData = JSON.parse(responseBody);",
+									"   postman.setEnvironmentVariable(\"merchant_id\", jsonData.id);",
+									"",
+									"   tests[\"Response Body has Merchant Id\"] = responseBody.has(\"\\\"id\\\":\"+\"\\\"\"+postman.getEnvironmentVariable(\"merchant_id\")+\"\\\"\");",
+									"   tests[\"Response Body has merchantAccountToken\"] = responseBody.has(\"\\\"merchantAccountToken\\\":\"+\"\\\"\"+jsonData.merchantAccountToken+\"\\\"\");",
+									"}",
+									"",
+									"tests[\"Response code should be 200\"] = responseCode.code === 200;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authId}}"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{URL}}/merchants/activate/{{merchant_id}}",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"merchants",
+								"activate",
+								"{{merchant_id}}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{payment_gateway_server}}/merchants/activate/{{merchant_id}}",
+									"host": [
+										"{{payment_gateway_server}}"
+									],
+									"path": [
+										"merchants",
+										"activate",
+										"{{merchant_id}}"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Payment Method",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a588ba23-1ff4-4c40-a87e-fdd35804b4ac",
+								"exec": [
+									"if (responseCode.code != 201)",
+									"{",
+									"   tests[\"[INFO]  Request Body: \" + JSON.stringify(request)] = true;",
+									"   tests[\"[INFO] Response Body: \" + responseBody] = true;",
+									"}",
+									"",
+									"else if (responseCode.code === 201)",
+									"{",
+									"   var jsonData = JSON.parse(responseBody);",
+									"   postman.setEnvironmentVariable(\"payment_method_id\", jsonData.id);",
+									"",
+									"   tests[\"Response Body has Payment Method  Id\"] = responseBody.has(\"\\\"id\\\":\"+\"\\\"\"+postman.getEnvironmentVariable(\"payment_method_id\")+\"\\\"\");",
+									"   tests[\"Response Body has accountHolderName\"] = responseBody.has(\"\\\"accountHolderName\\\":\"+\"\\\"\"+jsonData.accountHolderName+\"\\\"\");",
+									"}",
+									"   ",
+									"tests[\"Response code should be 200\"] = responseCode.code === 201;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authId}}"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"companyId\": \"{{company_id}}\",\r\n  \"type\" : \"CHECKING_ACH\",\r\n  \"accountHolderName\" : \"Sam John\",\r\n  \"bankRouting\" : \"082000073\",\r\n  \"accountNumber\" : \"852937164973\"\r\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/payment-method",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"payment-method"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"merchantId\": \"{{merchant_id}}\",\r\n  \"type\": \"SAVING\",\r\n  \"accountHolderName\": \"Patrick\",\r\n  \"routing\": \"172899966\",\r\n  \"number\": \"519844\",\r\n  \"acinIsactive\": \"true\"\r\n}"
+								},
+								"url": {
+									"raw": "{{payment_gateway_server}}/accountinfotoken",
+									"host": [
+										"{{payment_gateway_server}}"
+									],
+									"path": [
+										"accountinfotoken"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "CreateCharge",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "78c6efe2-67c9-4e5e-ab25-39cb5d010024",
+								"exec": [
+									"if (responseCode.code != 202)",
+									"{",
+									"   tests[\"[INFO]  Request Body: \" + JSON.stringify(request)] = true;",
+									"   tests[\"[INFO] Response Body: \" + responseBody] = true;",
+									"}",
+									"",
+									"else if (responseCode.code === 202)",
+									"{",
+									"   var jsonData = JSON.parse(responseBody);",
+									"   postman.setEnvironmentVariable(\"charge_id\", jsonData.id);",
+									"",
+									"   tests[\"Response Body has Charge Id\"] = responseBody.has(\"\\\"id\\\":\"+\"\\\"\"+postman.getEnvironmentVariable(\"charge_id\")+\"\\\"\");",
+									"   tests[\"Response Body has Amount\"] = responseBody.has(\"\\\"amount\\\":\"+\"\\\"\"+jsonData.amount+\"\\\"\");",
+									"  tests[\"Response Body has referenceId\"] = responseBody.has(\"\\\"referenceId\\\":\"+\"\\\"\"+jsonData.referenceId+\"\\\"\");",
+									"  tests[\"Response Body has paymentMethodId\"] = responseBody.has(\"\\\"paymentMethodId\\\":\"+\"\\\"\"+jsonData.paymentMethodId+\"\\\"\");",
+									"}",
+									"",
+									"tests[\"Response code should be 202\"] = responseCode.code === 202;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authId}}"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"merchantId\": \"{{merchant_id}}\",\n    \"paymentMethodId\": \"{{payment_method_id}}\",\n    \"amount\": \"300.34 \",\n    \"source\": \"BILLING\",\n    \"referenceId\": \"{{$guid}}\",\n    \"metadata\": {\n        \"clientId\": \"{{$guid}}\",\n        \"payorId\": \"{{$guid}}\"\n    }\n}"
+						},
+						"url": {
+							"raw": "{{URL}}/charge",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"charge"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"merchantId\": \"{{merchant_id}}\",\r\n  \"type\": \"SAVING\",\r\n  \"accountHolderName\": \"Patrick\",\r\n  \"routing\": \"172899966\",\r\n  \"number\": \"519844\",\r\n  \"acinIsactive\": \"true\"\r\n}"
+								},
+								"url": {
+									"raw": "{{payment_gateway_server}}/accountinfotoken",
+									"host": [
+										"{{payment_gateway_server}}"
+									],
+									"path": [
+										"accountinfotoken"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "GetCharge",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "78c6efe2-67c9-4e5e-ab25-39cb5d010024",
+								"exec": [
+									"if (responseCode.code != 200)",
+									"{",
+									"   tests[\"[INFO]  Request Body: \" + JSON.stringify(request)] = true;",
+									"   tests[\"[INFO] Response Body: \" + responseBody] = true;",
+									"}",
+									"",
+									"else if (responseCode.code === 200)",
+									"{",
+									"   var jsonData = JSON.parse(responseBody);",
+									" ",
+									"   tests[\"Response Body has Charge Id\"] = responseBody.has(\"\\\"id\\\":\"+\"\\\"\"+postman.getEnvironmentVariable(\"charge_id\")+\"\\\"\");",
+									"   tests[\"Response Body has Amount\"] = responseBody.has(\"\\\"amount\\\":\"+\"\\\"\"+jsonData.amount+\"\\\"\");",
+									"  tests[\"Response Body has referenceId\"] = responseBody.has(\"\\\"referenceId\\\":\"+\"\\\"\"+jsonData.referenceId+\"\\\"\");",
+									"  tests[\"Response Body has paymentMethodId\"] = responseBody.has(\"\\\"paymentMethodId\\\":\"+\"\\\"\"+jsonData.paymentMethodId+\"\\\"\");",
+									"}",
+									"",
+									"tests[\"Response code should be 200\"] = responseCode.code === 200;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authId}}"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{URL}}/charge/{{charge_id}}",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"charge",
+								"{{charge_id}}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"merchantId\": \"{{merchant_id}}\",\r\n  \"type\": \"SAVING\",\r\n  \"accountHolderName\": \"Patrick\",\r\n  \"routing\": \"172899966\",\r\n  \"number\": \"519844\",\r\n  \"acinIsactive\": \"true\"\r\n}"
+								},
+								"url": {
+									"raw": "{{payment_gateway_server}}/accountinfotoken",
+									"host": [
+										"{{payment_gateway_server}}"
+									],
+									"path": [
+										"accountinfotoken"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "DeleteMerchant",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ad368af3-73a7-48e1-9222-f4c633d6aed8",
+								"exec": [
+									"if (responseCode.code != 200)",
+									"{",
+									"  tests[\"[INFO]  Request Body: \" + JSON.stringify(request)] = true;",
+									"  tests[\"[INFO] Response Body: \" + responseBody] = true;",
+									"}",
+									"",
+									"else if (responseCode.code === 200)",
+									"{",
+									"  var jsonData = JSON.parse(responseBody);",
+									"",
+									"  tests[\"Response Body has Merchant\"] = responseBody.has(\"\\\"id\\\":\"+\"\\\"\"+jsonData.id+\"\\\"\");",
+									"",
+									"}",
+									"",
+									"tests[\"Merchant Deleted,Response code should be 200\"] = responseCode.code === 200;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authId}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{URL}}/merchants/{{merchant_id}}",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"merchants",
+								"{{merchant_id}}"
+							]
+						},
+						"description": "Delete Merchant By Id"
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteCompany",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0dcfd62b-bcaa-4f76-9bf5-d80e3b6c1105",
+								"exec": [
+									"if (responseCode.code != 200)",
+									"{",
+									"  tests[\"[INFO]  Request Body: \" + JSON.stringify(request)] = true;",
+									"  tests[\"[INFO] Response Body: \" + responseBody] = true;",
+									"}",
+									"",
+									"else if (responseCode.code === 200)",
+									"{",
+									"  var jsonData = JSON.parse(responseBody);",
+									"",
+									"  tests[\"Response Body has companyId\"] = responseBody.has(\"\\\"id\\\":\"+\"\\\"\"+jsonData.id+\"\\\"\");",
+									"}",
+									"",
+									"tests[\"Company Deleted,Response code should be 200\"] = responseCode.code === 200;",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{authId}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{URL}}/company/{{company_id}}",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"company",
+								"{{company_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
